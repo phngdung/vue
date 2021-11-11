@@ -35,7 +35,6 @@
         <el-button type="primary" @click="submitForm('student')"
           >Update</el-button
         >
-        <el-button @click="resetForm('ruleForm')">Reset</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -43,6 +42,7 @@
 
 <script>
 import { mapState } from "vuex";
+import { store } from "../store";
 export default {
   name: "Student",
   data() {
@@ -50,9 +50,10 @@ export default {
       student: {
         name: "",
         classSt: "",
-        math: "",
-        english: "",
-        literature: "",
+        math: 0,
+        english: 0,
+        literature: 0,
+        id: "",
       },
       position: "top",
       rules: {
@@ -96,7 +97,14 @@ export default {
     const id = this.$route.params.id;
     const student = this.students.find((val) => val.id === id);
     if (student) {
-      this.student = { ...student };
+      this.student = {
+        math: student.math,
+        english: student.english,
+        literature: student.literature,
+        name: student.name,
+        classSt: student.classSt,
+        id: student.id,
+      };
     }
   },
   computed: {
@@ -104,18 +112,11 @@ export default {
   },
   methods: {
     submitForm(formName) {
-      console.log('formname', this.student)
-      // this.$refs[formName].validate((valid) => {
-      //   if (valid) {
-      //     alert("submit!");
-      //   } else {
-      //     console.log("error submit!!");
-      //     return false;
-      //   }
-      // });
-    },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
+      this.student.math = parseFloat(this.student.math);
+      this.student.english = parseFloat(this.student.english);
+      this.student.literature = parseFloat(this.student.literature);
+      store.commit("editStudent", { ...this.student });
+      this.$router.push({ name: "student.list" });
     },
   },
 };
