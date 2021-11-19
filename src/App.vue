@@ -1,6 +1,8 @@
 <template>
   <el-container>
-    <el-header>{{this.$route.params.id ? 'Edit' : 'List of students'}} </el-header>
+    <el-header
+      >{{ this.$route.params.id ? "Edit" : "List of boys" }}
+    </el-header>
     <el-main>
       <router-view />
     </el-main>

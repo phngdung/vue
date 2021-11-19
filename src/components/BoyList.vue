@@ -1,22 +1,21 @@
 <template>
-  <el-table :data="students" border style="width: 100%">
+  <el-table :data="boys" border style="width: 100%">
     <el-table-column prop="id" label="ID" width="180"> </el-table-column>
     <el-table-column prop="name" label="Name" width="180"> </el-table-column>
     <el-table-column prop="age" label="Age"> </el-table-column>
     <el-table-column prop="city" label="City"> </el-table-column>
     <el-table-column prop="height" label="Height"> </el-table-column>
     <el-table-column prop="weight" label="Weight"> </el-table-column>
-    <el-table-column prop="classSt" label="Class"> </el-table-column>
-    <el-table-column prop="math" label="Math"> </el-table-column>
-    <el-table-column prop="literature" label="Literature"> </el-table-column>
-    <el-table-column prop="english" label="English"> </el-table-column>
+    <el-table-column prop="hobbit" label="Hobbit"> </el-table-column>
+    <el-table-column prop="hairColor" label="Hair Color"> </el-table-column>
+    <el-table-column prop="skill" label="Skill"> </el-table-column>
     <el-table-column fixed="right" label="Operations" width="120">
       <template slot-scope="scope">
         <el-button type="text" size="small">
           <router-link
             :to="{
-              name: 'student.index',
-              params: { id: students[scope.$index].id },
+              name: 'boy.index',
+              params: { id: boys[scope.$index].id },
             }"
             >Edit</router-link
           >
@@ -27,17 +26,29 @@
 </template>
 
 <script>
-// import students from "../mock/student";
-import { mapState } from 'vuex'
+// import boys from "../mock/boy";
+import { mapState } from "vuex";
+import axios from "axios";
 export default {
-  name: "Student-list",
+  name: "Boy-list",
   data() {
     return {
-  
+      boys: [],
     };
   },
   computed: {
-    ...mapState(["students"]),
+    ...mapState(["boys"]),
+  },
+  mounted() {
+    axios
+      .get("http://localhost:3000/boys")
+      .then((data) => {
+        this.boys = data.data;
+        // console.log('boys',this.boys);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
 };
 </script>

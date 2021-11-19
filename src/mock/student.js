@@ -2,7 +2,7 @@ import faker from "faker";
 
 // ----------------------------------------------------------------------
 
-const students_mock = [...Array(10)].map((_, index) => ({
+const boys_mock = [...Array(10)].map((_, index) => ({
   id: faker.datatype.uuid(),
   name: faker.name.findName(),
   age: faker.datatype.number(),
@@ -15,4 +15,4 @@ const students_mock = [...Array(10)].map((_, index) => ({
   english: faker.datatype.float({ max: 10.0, min: 0 }),
 }));
 
-export default students_mock;
+export default boys_mock;
