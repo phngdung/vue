@@ -42,6 +42,7 @@
 <script>
 import { mapState } from "vuex";
 import { store } from "../store";
+import axios from "axios";
 export default {
   name: "Boy",
   data() {
@@ -49,7 +50,6 @@ export default {
       boy: {
         name: "",
         age: "",
-        id: "",
       },
       position: "top",
       rules: {
@@ -63,28 +63,32 @@ export default {
       },
     };
   },
-  mounted: function () {
-    const id = this.$route.params.id;
-    console.log(id);
-    const boy = this.boys.find((val) => val.id === id);
-    if (boy) {
-      console.log(2);
-      this.boy = {
-        name: boy.name,
-        age: boy.age,
-        id: boy.id,
-      };
-    }
-  },
+  // mounted: function () {
+  //   const id = this.$route.params.id;
+  //   console.log(id);
+  //   const boy = this.boys.find((val) => val.id === id);
+  //   if (boy) {
+  //     console.log(2);
+  //     this.boy = {
+  //       name: boy.name,
+  //       age: boy.age,
+  //       id: boy.id,
+  //     };
+  //   }
+  // },
   computed: {
-    ...mapState(["boys"]),
+    // ...mapState(["boys"]),
   },
   methods: {
     submitForm(formName) {
+      const id = this.$route.params.id;
       this.boy.age = parseInt(this.boy.age);
-      // this.boy.english = parseFloat(this.boy.english);
-      // this.boy.literature = parseFloat(this.boy.literature);
-      store.commit("editBoy", { ...this.boy });
+      this.boy.height = parseFloat(this.boy.height);
+      this.boy.weight = parseFloat(this.boy.weight);
+      console.log(this.boy);
+      axios.put("http://localhost:3000/boys/" + id, this.boy).catch((err) => {
+        console.log(err);
+      });
       this.$router.push({ name: "boy.list" });
     },
   },
