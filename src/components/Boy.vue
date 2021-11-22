@@ -33,7 +33,9 @@
       </el-form-item>
 
       <el-form-item style="text-align: center">
-        <el-button type="primary" @click="submitForm('boy')">Update</el-button>
+        <el-button type="primary" @click="submitForm('boy')">{{
+          type == "add" ? "Add" : "Update"
+        }}</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -63,33 +65,36 @@ export default {
       },
     };
   },
-  // mounted: function () {
-  //   const id = this.$route.params.id;
-  //   console.log(id);
-  //   const boy = this.boys.find((val) => val.id === id);
-  //   if (boy) {
-  //     console.log(2);
-  //     this.boy = {
-  //       name: boy.name,
-  //       age: boy.age,
-  //       id: boy.id,
-  //     };
-  //   }
-  // },
   computed: {
     // ...mapState(["boys"]),
+    type() {
+      if (this.$route.name == "boy.add") return "add";
+      else if (this.$route.name == "boy.index") return "update";
+    },
   },
   methods: {
     submitForm(formName) {
-      const id = this.$route.params.id;
-      this.boy.age = parseInt(this.boy.age);
-      this.boy.height = parseFloat(this.boy.height);
-      this.boy.weight = parseFloat(this.boy.weight);
-      console.log(this.boy);
-      axios.put("http://localhost:3000/boys/" + id, this.boy).catch((err) => {
-        console.log(err);
-      });
-      this.$router.push({ name: "boy.list" });
+      if (this.type == "update") {
+        const id = this.$route.params.id;
+        this.boy.age = parseInt(this.boy.age);
+        this.boy.height = parseFloat(this.boy.height);
+        this.boy.weight = parseFloat(this.boy.weight);
+        console.log(this.boy);
+        axios.put("http://localhost:3000/boys/" + id, this.boy).catch((err) => {
+          console.log(err);
+        });
+        this.$router.push({ name: "boy.list" });
+      } else if (this.type == "add") {
+        const id = this.$route.params.id;
+        this.boy.age = parseInt(this.boy.age);
+        this.boy.height = parseFloat(this.boy.height);
+        this.boy.weight = parseFloat(this.boy.weight);
+        console.log(this.boy);
+        axios.post("http://localhost:3000/boys", this.boy).catch((err) => {
+          console.log(err);
+        });
+        this.$router.push({ name: "boy.list" });
+      }
     },
   },
 };

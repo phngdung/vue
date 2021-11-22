@@ -15,6 +15,7 @@ Vue.use(VueRouter);
 export const router = new VueRouter({
   routes: [
     { path: "/", component: BoyListVue, name: "boy.list" },
+    { path: "/add", component: Boy, name: "boy.add" },
     { path: "/edit/:id", component: Boy, name: "boy.index" },
   ],
 });
