@@ -1,9 +1,14 @@
 <template>
   <div>
-    <el-button type="primary" @click="add"
-      >Add</el-button
+    <el-button type="primary" @click="add">Add</el-button>
+    <el-button type="primary" @click="exportExcel">Export</el-button>
+    <el-table
+      :data="boys"
+      border
+      style="width: 100%"
+      height="1000"
+      ref="dataTable"
     >
-    <el-table :data="boys" border style="width: 100%">
       <el-table-column prop="id" label="ID" width="80">
         <template slot-scope="scope">
           <div>{{ scope.row.id }}</div>
@@ -14,22 +19,35 @@
           <div>{{ scope.row.name }}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="age" label="Age">
+      <el-table-column
+        prop="age"
+        label="Age"
+        :filters="this.ageList"
+        filter-placement="bottom-end"
+        :filter-method="filterAge"
+        sortable
+      >
         <template slot-scope="scope">
           <div>{{ scope.row.age }}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="city" label="City">
+      <el-table-column
+        prop="city"
+        label="City"
+        :filters="this.cityList"
+        filter-placement="bottom-end"
+        :filter-method="filterCity"
+      >
         <template slot-scope="scope">
           <div>{{ scope.row.city }}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="height" label="Height">
+      <el-table-column prop="height" label="Height" sortable>
         <template slot-scope="scope">
           <div>{{ scope.row.height }}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="weight" label="Weight">
+      <el-table-column prop="weight" label="Weight" sortable>
         <template slot-scope="scope">
           <div>{{ scope.row.weight }}</div>
         </template>
@@ -82,6 +100,9 @@ export default {
   data() {
     return {
       boys: [],
+      ageList: [],
+      cityList: [],
+      filterList: [],
     };
   },
   computed: {
@@ -92,6 +113,24 @@ export default {
       .get("http://localhost:3000/boys")
       .then((data) => {
         this.boys = [...data.data];
+        this.boys.forEach((boy) => {
+          if (!this.ageList.find((b) => b == boy.age)) {
+            this.ageList.push(boy.age);
+          }
+        });
+        this.ageList = this.ageList.map((o) => ({
+          value: o,
+          text: "" + o,
+        }));
+        this.boys.forEach((boy) => {
+          if (!this.cityList.find((b) => b === boy.city)) {
+            this.cityList.push(boy.city);
+          }
+        });
+        this.cityList = this.cityList.map((o) => ({
+          value: o,
+          text: "" + o,
+        }));
       })
       .catch((err) => {
         console.log(err);
@@ -106,9 +145,28 @@ export default {
         });
       this.$router.go();
     },
-    add(){
-      this.$router.push({name : "boy.add"})
-    }
+    add() {
+      this.$router.push({ name: "boy.add" });
+    },
+    filterAge(value, row) {
+      return row.age === value;
+    },
+    filterCity(value, row) {
+      return row.city === value;
+    },
+    exportExcel() {
+      axios
+        .post(
+          "http://localhost:3000/boys/export",
+          this.$refs.dataTable.tableData
+        )
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
 };
 </script>
