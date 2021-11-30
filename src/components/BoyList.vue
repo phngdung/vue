@@ -155,18 +155,16 @@ export default {
       return row.city === value;
     },
     exportExcel() {
-      axios
-        .get(
-          "http://localhost:3000/boys/byOptions?isExport=true",
-          { responseType: "blob" }
-          // this.$refs.dataTable.tableData
-        )
+      axios({
+        method: "POST",
+        url: "http://localhost:3000/boys/export",
+        responseType: "blob",
+        data: this.$refs.dataTable.tableData,
+      })
         .then((response) => {
-          console.log(response);
           const link = document.createElement("a");
           link.href = window.URL.createObjectURL(new Blob([response.data]));
           const filename = `boys_` + new Date().toJSON().slice(0, 10) + `.xlsx`;
-          console.log(filename);
           link.setAttribute("download", filename);
           document.body.appendChild(link);
           link.click();
@@ -175,24 +173,6 @@ export default {
           console.log(err);
         });
     },
-    //     exportExcel() {
-    //   axios
-    //     .post(
-    //       "http://localhost:3000/boys/export",
-    //       { responseType: "blob" },
-    //       this.$refs.dataTable.tableData
-    //     )
-    //     .then((response) => {
-    //       const link = document.createElement("a");
-    //       link.href = window.URL.createObjectURL(new Blob([response.data]));
-    //       link.setAttribute("download", "report.xlsx");
-    //       document.body.appendChild(link);
-    //       link.click();
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // },
   },
 };
 </script>
