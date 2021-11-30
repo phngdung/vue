@@ -156,17 +156,43 @@ export default {
     },
     exportExcel() {
       axios
-        .post(
-          "http://localhost:3000/boys/export",
-          this.$refs.dataTable.tableData
+        .get(
+          "http://localhost:3000/boys/byOptions?isExport=true",
+          { responseType: "blob" }
+          // this.$refs.dataTable.tableData
         )
-        .then((data) => {
-          console.log(data);
+        .then((response) => {
+          console.log(response);
+          const link = document.createElement("a");
+          link.href = window.URL.createObjectURL(new Blob([response.data]));
+          const filename = `boys_` + new Date().toJSON().slice(0, 10) + `.xlsx`;
+          console.log(filename);
+          link.setAttribute("download", filename);
+          document.body.appendChild(link);
+          link.click();
         })
         .catch((err) => {
           console.log(err);
         });
     },
+    //     exportExcel() {
+    //   axios
+    //     .post(
+    //       "http://localhost:3000/boys/export",
+    //       { responseType: "blob" },
+    //       this.$refs.dataTable.tableData
+    //     )
+    //     .then((response) => {
+    //       const link = document.createElement("a");
+    //       link.href = window.URL.createObjectURL(new Blob([response.data]));
+    //       link.setAttribute("download", "report.xlsx");
+    //       document.body.appendChild(link);
+    //       link.click();
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // },
   },
 };
 </script>
