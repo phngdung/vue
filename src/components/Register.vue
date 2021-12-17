@@ -20,13 +20,13 @@
       >
         Register
       </button>
-      <button
-        type="submit"
-        class="btn btn-dark btn-lg btn-block"
-        @click="handleSignIn"
-      >
-        Sign in
-      </button>
+      <p>
+        <br />
+        Have account? Click here
+        <button type="submit" class="btn-default" @click="handleSignIn">
+          Sign in
+        </button>
+      </p>
     </form>
   </div>
 </template>
@@ -52,7 +52,7 @@ export default {
     //...mapActions("account", ["register"]),
     handleRegister(e) {
       axios
-        .post("http://localhost:3000/register", this.user)
+        .post("http://localhost:3000/auth/register", this.user)
         .catch((error) => console.log(error));
     },
     handleSignIn(e) {

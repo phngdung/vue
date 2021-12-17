@@ -90,9 +90,11 @@ export default {
         this.boy.height = parseFloat(this.boy.height);
         this.boy.weight = parseFloat(this.boy.weight);
         console.log(this.boy);
-        axios.post("http://localhost:3000/boys", this.boy).catch((err) => {
-          console.log(err);
-        });
+        axios
+          .post("http://localhost:3000/friends/add", this.boy)
+          .catch((err) => {
+            console.log(err);
+          });
         this.$router.push({ name: "boy.list" });
       }
     },

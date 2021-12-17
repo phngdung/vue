@@ -20,9 +20,15 @@
       >
         Sign in
       </button>
-
       <p class="forgot-password text-right mt-2 mb-4">
         <router-link to="/forgot-password">Forgot password ?</router-link>
+      </p>
+      <p>
+        <br />
+        Don't have account? Click here
+        <button type="submit" class="btn-default" @click="handleRegister">
+          Register
+        </button>
       </p>
     </form>
   </div>
@@ -36,8 +42,8 @@ export default {
   data() {
     return {
       user: {
-        username: "",
-        password: "",
+        username: "dung",
+        password: "0807",
       },
       submitted: false,
     };
@@ -47,10 +53,15 @@ export default {
   },
   methods: {
     handleSignIn(e) {
-      axios.post("http://localhost:3000/login/", this.user).catch((err) => {
-        console.log(err);
-      });
+      axios
+        .post("http://localhost:3000/auth/login/", this.user)
+        .catch((err) => {
+          console.log(err);
+        });
       this.$router.push({ name: "boy.list" });
+    },
+    handleRegister(e) {
+      this.$router.push({ name: "register" });
     },
   },
 };
