@@ -80,9 +80,15 @@ export default {
         this.boy.height = parseFloat(this.boy.height);
         this.boy.weight = parseFloat(this.boy.weight);
         console.log(this.boy);
-        axios.put("http://localhost:3000/boys/" + id, this.boy).catch((err) => {
-          console.log(err);
-        });
+        axios
+          .put("http://localhost:3000/friends/" + id, this.boy, {
+            headers: {
+              token: this.$cookies.get("token"),
+            },
+          })
+          .catch((err) => {
+            console.log(err);
+          });
         this.$router.push({ name: "boy.list" });
       } else if (this.type == "add") {
         const id = this.$route.params.id;
@@ -91,7 +97,11 @@ export default {
         this.boy.weight = parseFloat(this.boy.weight);
         console.log(this.boy);
         axios
-          .post("http://localhost:3000/friends/add", this.boy)
+          .post("http://localhost:3000/friends/add", this.boy, {
+            headers: {
+              token: this.$cookies.get("token"),
+            },
+          })
           .catch((err) => {
             console.log(err);
           });

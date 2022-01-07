@@ -37,6 +37,7 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import "bootstrap/dist/css/bootstrap.min.css";
+import VueCookies from "vue-cookies";
 import axios from "axios";
 export default {
   data() {
@@ -55,6 +56,10 @@ export default {
     handleSignIn(e) {
       axios
         .post("http://localhost:3000/auth/login/", this.user)
+        .then((data) => {
+          console.log(data.data);
+          this.$cookies.set("token", data.data, 60 * 60 * 24 * 30);
+        })
         .catch((err) => {
           console.log(err);
         });

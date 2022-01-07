@@ -39,8 +39,8 @@ export default {
   data() {
     return {
       user: {
-        email: "",
-        password: "",
+        username: "dung2",
+        password: "2",
       },
       submitted: false,
     };

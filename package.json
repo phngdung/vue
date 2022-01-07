@@ -15,6 +15,7 @@
     "element-ui": "^2.15.6",
     "faker": "^5.5.3",
     "vue": "^2.6.11",
+    "vue-cookies": "^1.7.4",
     "vue-infinite-loading": "^2.4.5",
     "vue-infinite-scroll": "^2.0.2",
     "vue-router": "^3.5.3",
