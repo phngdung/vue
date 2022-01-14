@@ -15,7 +15,7 @@ import SignIn from "./components/SignIn.vue";
 Vue.use(VueRouter);
 export const router = new VueRouter({
   routes: [
-    { path: "/", component: Register, name: "register" },
+    { path: "/", component: SignIn, name: "signin" },
     { path: "/signin", component: SignIn, name: "signin" },
     { path: "/list-boy", component: BoyListVue, name: "boy.list" },
     { path: "/add", component: Boy, name: "boy.add" },

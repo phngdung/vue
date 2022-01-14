@@ -2,6 +2,7 @@
   <div>
     <el-button type="primary" @click="add">Add</el-button>
     <el-button type="primary" @click="exportExcel">Export</el-button>
+    <el-button type="primary" @click="logout">Logout </el-button>
     <el-table
       :data="boys"
       border
@@ -110,8 +111,13 @@ export default {
   },
   mounted() {
     axios
-      .get("http://localhost:3000/boys")
+      .get("http://localhost:3000/friends", {
+        headers: {
+          token: this.$cookies.get("token"),
+        },
+      })
       .then((data) => {
+        console.log(data);
         this.boys = [...data.data];
         this.boys.forEach((boy) => {
           if (!this.ageList.find((b) => b == boy.age)) {
@@ -139,7 +145,11 @@ export default {
   methods: {
     deleteBoy(id) {
       axios
-        .get("http://localhost:3000/boys/delete/" + id, this.boy)
+        .get("http://localhost:3000/friends/delete/" + id, this.boy, {
+          headers: {
+            token: this.$cookies.get("token"),
+          },
+        })
         .catch((err) => {
           console.log(err);
         });
@@ -172,6 +182,11 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    logout() {
+      axios.get("http://localhost:3000/auth/logout");
+      this.$cookies.remove("token");
+      this.$router.push({ name: "register" });
     },
   },
 };

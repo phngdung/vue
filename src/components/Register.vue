@@ -5,12 +5,20 @@
 
       <div class="form-group">
         <label>Username</label>
-        <input type="username" class="form-control form-control-lg" />
+        <input
+          type="username"
+          v-model="user.username"
+          class="form-control form-control-lg"
+        />
       </div>
 
       <div class="form-group mb-2">
         <label>Password</label>
-        <input type="password" class="form-control form-control-lg" />
+        <input
+          type="password"
+          v-model="user.password"
+          class="form-control form-control-lg"
+        />
       </div>
 
       <button
@@ -20,13 +28,13 @@
       >
         Register
       </button>
-      <button
-        type="submit"
-        class="btn btn-dark btn-lg btn-block"
-        @click="handleSignIn"
-      >
-        Sign in
-      </button>
+      <p>
+        <br />
+        Have account? Click here
+        <button type="submit" class="btn-default" @click="handleSignIn">
+          Sign in
+        </button>
+      </p>
     </form>
   </div>
 </template>
@@ -39,7 +47,7 @@ export default {
   data() {
     return {
       user: {
-        email: "",
+        username: "",
         password: "",
       },
       submitted: false,
@@ -52,8 +60,11 @@ export default {
     //...mapActions("account", ["register"]),
     handleRegister(e) {
       axios
-        .post("http://localhost:3000/register", this.user)
-        .catch((error) => console.log(error));
+        .post("http://localhost:3000/auth/register", this.user)
+        .catch((error) => {
+          console.log(error);
+          this.$message("Cannot register user");
+        });
     },
     handleSignIn(e) {
       this.$router.push({ name: "signin" });
