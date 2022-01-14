@@ -2,6 +2,7 @@
   <div>
     <el-button type="primary" @click="add">Add</el-button>
     <el-button type="primary" @click="exportExcel">Export</el-button>
+    <el-button type="primary" @click="logout">Logout </el-button>
     <el-table
       :data="boys"
       border
@@ -181,6 +182,11 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    logout() {
+      axios.get("http://localhost:3000/auth/logout");
+      this.$cookies.remove("token");
+      this.$router.push({ name: "register" });
     },
   },
 };

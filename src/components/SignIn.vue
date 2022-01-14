@@ -5,12 +5,20 @@
 
       <div class="form-group">
         <label>Username</label>
-        <input type="username" class="form-control form-control-lg" />
+        <input
+          type="username"
+          v-model="user.username"
+          class="form-control form-control-lg"
+        />
       </div>
 
       <div class="form-group mb-2">
         <label>Password</label>
-        <input type="password" class="form-control form-control-lg" />
+        <input
+          type="password"
+          v-model="user.password"
+          class="form-control form-control-lg"
+        />
       </div>
 
       <button
@@ -38,13 +46,14 @@
 import { mapState, mapActions } from "vuex";
 import "bootstrap/dist/css/bootstrap.min.css";
 import VueCookies from "vue-cookies";
+import { required, minLength, between } from "vuelidate/lib/validators";
 import axios from "axios";
 export default {
   data() {
     return {
       user: {
-        username: "dung",
-        password: "0807",
+        username: "",
+        password: "",
       },
       submitted: false,
     };
@@ -59,11 +68,14 @@ export default {
         .then((data) => {
           console.log(data.data);
           this.$cookies.set("token", data.data, 60 * 60 * 24 * 30);
+          this.$message("Login successfully.");
+          this.$router.push({ name: "boy.list" });
         })
         .catch((err) => {
           console.log(err);
+          this.$message("Username and password are incorrect.");
+          this.$router.push({ name: "signin" });
         });
-      this.$router.push({ name: "boy.list" });
     },
     handleRegister(e) {
       this.$router.push({ name: "register" });
