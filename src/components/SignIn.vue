@@ -3,22 +3,34 @@
     <form>
       <h3>Sign in</h3>
 
-      <div class="form-group">
-        <label>Username</label>
+      <div
+        class="form-group"
+        :class="{ 'form-group--error': $v.user.username.$error }"
+      >
+        <label class="form__label">Username</label>
         <input
+          class="form-control form-control-lg form__input"
           type="username"
-          v-model="user.username"
-          class="form-control form-control-lg"
+          v-model.trim="$v.user.username.$model"
         />
       </div>
+      <div class="error" v-if="!$v.user.username.required">
+        Field is required.
+      </div>
 
-      <div class="form-group mb-2">
-        <label>Password</label>
+      <div
+        class="form-group"
+        :class="{ 'form-group--error': $v.user.password.$error }"
+      >
+        <label class="form__label">Password</label>
         <input
+          class="form-control form-control-lg form__input"
           type="password"
-          v-model="user.password"
-          class="form-control form-control-lg"
+          v-model.trim="$v.user.password.$model"
         />
+      </div>
+      <div class="error" v-if="!$v.user.password.required">
+        Field is required.
       </div>
 
       <button
@@ -58,24 +70,39 @@ export default {
       submitted: false,
     };
   },
+  validations: {
+    user: {
+      username: {
+        required,
+      },
+      password: {
+        required,
+      },
+    },
+  },
   computed: {
     //...mapState("account", ["status"]),
   },
   methods: {
     handleSignIn(e) {
-      axios
-        .post("http://localhost:3000/auth/login/", this.user)
-        .then((data) => {
-          console.log(data.data);
-          this.$cookies.set("token", data.data, 60 * 60 * 24 * 30);
-          this.$message("Login successfully.");
-          this.$router.push({ name: "boy.list" });
-        })
-        .catch((err) => {
-          console.log(err);
-          this.$message("Username and password are incorrect.");
-          this.$router.push({ name: "signin" });
-        });
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        this.$message("Please input a valid");
+      } else {
+        axios
+          .post("http://localhost:3000/auth/login/", this.user)
+          .then((data) => {
+            console.log(data.data);
+            this.$cookies.set("token", data.data, 60 * 60 * 24 * 30);
+            this.$message("Login successfully.");
+            this.$router.push({ name: "boy.list" });
+          })
+          .catch((err) => {
+            console.log(err);
+            this.$message("Username and password are incorrect.");
+            this.$router.push({ name: "signin" });
+          });
+      }
     },
     handleRegister(e) {
       this.$router.push({ name: "register" });

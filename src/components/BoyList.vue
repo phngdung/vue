@@ -107,7 +107,7 @@ export default {
     };
   },
   computed: {
-    //...mapState(["boys"]),
+    // ...mapState(["boys"]),
   },
   mounted() {
     axios
@@ -145,7 +145,7 @@ export default {
   methods: {
     deleteBoy(id) {
       axios
-        .get("http://localhost:3000/friends/delete/" + id, this.boy, {
+        .get("http://localhost:3000/friends/delete/" + id, {
           headers: {
             token: this.$cookies.get("token"),
           },
@@ -167,7 +167,7 @@ export default {
     exportExcel() {
       axios({
         method: "POST",
-        url: "http://localhost:3000/boys/export",
+        url: "http://localhost:3000/friends/export",
         responseType: "blob",
         data: this.$refs.dataTable.tableData,
       })
@@ -186,7 +186,7 @@ export default {
     logout() {
       axios.get("http://localhost:3000/auth/logout");
       this.$cookies.remove("token");
-      this.$router.push({ name: "register" });
+      this.$router.push({ name: "signin" });
     },
   },
 };
