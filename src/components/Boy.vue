@@ -17,10 +17,18 @@
         <el-input placeholder="Please input" v-model="boy.city"></el-input>
       </el-form-item>
       <el-form-item label="Height" prop="height">
-        <el-input placeholder="Please input" v-model="boy.height"></el-input>
+        <el-input
+          placeholder="Please input"
+          v-model="boy.height"
+          type="number"
+        ></el-input>
       </el-form-item>
       <el-form-item label="Weight" prop="weight">
-        <el-input placeholder="Please input" v-model="boy.weight"></el-input>
+        <el-input
+          placeholder="Please input"
+          v-model="boy.weight"
+          type="number"
+        ></el-input>
       </el-form-item>
       <el-form-item label="Hobbit" prop="hobbit">
         <el-input placeholder="Please input" v-model="boy.hobbit"></el-input>
@@ -37,6 +45,9 @@
           type == "add" ? "Add" : "Update"
         }}</el-button>
       </el-form-item>
+      <el-form-item>
+        <el-button type="default" @click="back">Back</el-button>
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -52,6 +63,12 @@ export default {
       boy: {
         name: "",
         age: "",
+        city: "",
+        height: "",
+        weight: "",
+        hobbit: "",
+        hairColor: "",
+        skill: "",
       },
       position: "top",
       rules: {
@@ -72,6 +89,25 @@ export default {
       else if (this.$route.name == "boy.index") return "update";
     },
   },
+  created() {
+    if (this.$route.name == "boy.index") {
+      axios
+        .get("http://localhost:3000/boys/" + this.$route.params.id)
+        .then((data) => {
+          const res = data.data;
+          this.boy.name = res.name;
+          this.boy.age = res.age;
+          this.boy.city = res.city;
+          this.boy.height = res.height;
+          this.boy.weight = res.weight;
+          this.boy.hobbit = res.hobbit;
+          this.boy.hairColor = res.hairColor;
+          this.boy.skill = res.skill;
+        });
+      // const res ;
+      // this.boy.name = res.am
+    }
+  },
   methods: {
     submitForm(formName) {
       if (this.type == "update") {
@@ -81,7 +117,7 @@ export default {
         this.boy.weight = parseFloat(this.boy.weight);
         console.log(this.boy);
         axios
-          .put("http://localhost:3000/friends/" + id, this.boy, {
+          .put("http://localhost:3000/boys/" + id, this.boy, {
             headers: {
               token: this.$cookies.get("token"),
             },
@@ -106,7 +142,11 @@ export default {
             console.log(err);
           });
         this.$router.push({ name: "boy.list" });
+        this.$router.go();
       }
+    },
+    back() {
+      this.$router.push({ name: "boy.list" });
     },
   },
 };

@@ -3,22 +3,34 @@
     <form>
       <h3>Register</h3>
 
-      <div class="form-group">
-        <label>Username</label>
+      <div
+        class="form-group"
+        :class="{ 'form-group--error': $v.user.username.$error }"
+      >
+        <label class="form__label">Username</label>
         <input
+          class="form-control form-control-lg form__input"
           type="username"
-          v-model="user.username"
-          class="form-control form-control-lg"
+          v-model.trim="$v.user.username.$model"
         />
       </div>
+      <div class="error" v-if="!$v.user.username.required">
+        Field is required.
+      </div>
 
-      <div class="form-group mb-2">
-        <label>Password</label>
+      <div
+        class="form-group"
+        :class="{ 'form-group--error': $v.user.password.$error }"
+      >
+        <label class="form__label">Password</label>
         <input
+          class="form-control form-control-lg form__input"
           type="password"
-          v-model="user.password"
-          class="form-control form-control-lg"
+          v-model.trim="$v.user.password.$model"
         />
+      </div>
+      <div class="error" v-if="!$v.user.password.required">
+        Field is required.
       </div>
 
       <button
@@ -42,6 +54,7 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { required, minLength, between } from "vuelidate/lib/validators";
 import axios from "axios";
 export default {
   data() {
@@ -53,18 +66,33 @@ export default {
       submitted: false,
     };
   },
+  validations: {
+    user: {
+      username: {
+        required,
+      },
+      password: {
+        required,
+      },
+    },
+  },
   computed: {
     //...mapState("account", ["status"]),
   },
   methods: {
     //...mapActions("account", ["register"]),
     handleRegister(e) {
-      axios
-        .post("http://localhost:3000/auth/register", this.user)
-        .catch((error) => {
-          console.log(error);
-          this.$message("Cannot register user");
-        });
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        this.$message("Please input a valid");
+      } else {
+        axios
+          .post("http://localhost:3000/auth/register", this.user)
+          .catch((error) => {
+            console.log(error);
+            this.$message("Cannot register user");
+          });
+      }
     },
     handleSignIn(e) {
       this.$router.push({ name: "signin" });
